@@ -152,15 +152,17 @@ function initWebSocket(){
 function onMessage(event) {
     console.log("Message receievd from server");
     var obj = JSON.parse(event.data);
-    console.log(obj);
-    s1.innerHTML(obj.s1name + ' - ' + obj.s1time + ' min');
-    s2.innerHTML(obj.s2name + ' - ' + obj.s2time + ' min');
-    s3.innerHTML(obj.s3name + ' - ' + obj.s3time + ' min');
-    s3.innerHTML(obj.s4name + ' - ' + obj.s4time + ' min');
-    b1.classList.toggle("on", obj.s1);
-    b1.classList.toggle("on", obj.s2);
-    b1.classList.toggle("on", obj.s3);
-    b1.classList.toggle("on", obj.s4);
+    if("message" in obj) console.log(obj);
+    if("s1name" in obj) {
+        s1.innerHTML(obj.s1name + ' - ' + obj.s1time + ' min');
+        s2.innerHTML(obj.s2name + ' - ' + obj.s2time + ' min');
+        s3.innerHTML(obj.s3name + ' - ' + obj.s3time + ' min');
+        s3.innerHTML(obj.s4name + ' - ' + obj.s4time + ' min');
+        b1.classList.toggle("on", obj.s1);
+        b1.classList.toggle("on", obj.s2);
+        b1.classList.toggle("on", obj.s3);
+        b1.classList.toggle("on", obj.s4);
+    }
 }
 function onOpen(event) {
     console.log('Connection open');
