@@ -133,7 +133,7 @@ var pageObj = {
 function sendCommand(element) {
     var id = element.id;
     var commandObj = {type : "command", toggle : 0};
-    var commandObj.toggle = id;
+    commandObj.toggle = id;
     websocket.send(JSON.stringify(commandObj));
     console.log(commandObj);
 }
