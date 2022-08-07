@@ -98,7 +98,22 @@ button {
     </div>
     </div>
 </body>
+
 <script>
+var pageObj = {
+    s1 : false,
+    s2 : false,
+    s3 : false,
+    s4 : false,
+    s1name : "Station 1",
+    S2name : "Station 2",
+    s3name : "Station 3",
+    s4name : "Station 4",
+    s1time : 10,
+    s2time : 10,
+    s3time : 10,
+    s4time : 10
+}
 var server = 'ws://' + window.location.hostname + '/ws';
 var websocket;
 window.addEventListener('load', onLoad);
