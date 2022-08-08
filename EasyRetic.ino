@@ -42,7 +42,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket
       const char *button = doc["toggle"];
       Serial.print("Button number:");
       Serial.println(String(button));
-      rs.toggle(button, &savedTimes);
+      rs.toggle(atoi(button), &savedTimes);
       sendDataWs(client);
       // Create a function to toggle the correct station in ReticSchedule and use it here
     }
