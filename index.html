@@ -63,7 +63,7 @@ button {
 .container {
     display: flex;
     flex-direction: column;
-    row-gap: 5px;
+    row-gap: 20px;
 }
 .on {
     background-color: rgb(22, 118, 21);
@@ -85,17 +85,33 @@ button {
     </ul>
     </nav>
     <div class="container">
-    <div class="spacer" style="padding: 10px 0px 0px 20px;"><span id="s1">Station 1 - 10 min</span></div>
+    <div class="spacer" style="padding: 20px 0px 0px 20px;"><span id="s1">Station 1 - 10 min</span></div>
     <div class="row">
     <ul>
         <li style="float:left;"><button id="1" onclick="sendCommand(this)" value = "0">ON</button></li>
         <li><button>R</button></li>
         <li><button>T</button></li>
     </ul>
-    </div><br>
-    <div class="spacer" style="padding: 10px 0px 0px 20px;"><span id="s2">Station 2 - 10 min</span></div>
+    </div>
+    <div class="spacer" style="padding: 20px 0px 0px 20px;"><span id="s2">Station 2 - 10 min</span></div>
     <div class="row">
         <li style="float:left;"><button id="2" onclick="sendCommand(this)" value="0">ON</button></li>
+        <li><button>R</button></li>
+        <li><button>T</button></li>
+    </ul>
+    </div>
+    <div class="spacer" style="padding: 20px 0px 0px 20px;"><span id="s3">Station 3 - 10 min</span></div>
+    <div class="row">
+    <ul>
+        <li style="float:left;"><button id="3" onclick="sendCommand(this)" value = "0">ON</button></li>
+        <li><button>R</button></li>
+        <li><button>T</button></li>
+    </ul>
+    </div>
+    <div class="spacer" style="padding: 20px 0px 0px 20px;"><span id="s4">Station 4 - 10 min</span></div>
+    <div class="row">
+    <ul>
+        <li style="float:left;"><button id="4" onclick="sendCommand(this)" value = "0">ON</button></li>
         <li><button>R</button></li>
         <li><button>T</button></li>
     </ul>
@@ -154,14 +170,14 @@ function onMessage(event) {
     var obj = JSON.parse(event.data);
     if("message" in obj) console.log(obj);
     if("s1name" in obj) {
-        s1.innerHTML(obj.s1name + ' - ' + obj.s1time + ' min');
-        s2.innerHTML(obj.s2name + ' - ' + obj.s2time + ' min');
-        s3.innerHTML(obj.s3name + ' - ' + obj.s3time + ' min');
-        s3.innerHTML(obj.s4name + ' - ' + obj.s4time + ' min');
+        s1.innerHTML = obj.s1name + ' - ' + obj.s1time + ' min';
+        s2.innerHTML = obj.s2name + ' - ' + obj.s2time + ' min';
+        s3.innerHTML = obj.s3name + ' - ' + obj.s3time + ' min';
+        s3.innerHTML = obj.s4name + ' - ' + obj.s4time + ' min';
         b1.classList.toggle("on", obj.s1);
-        b1.classList.toggle("on", obj.s2);
-        b1.classList.toggle("on", obj.s3);
-        b1.classList.toggle("on", obj.s4);
+        b2.classList.toggle("on", obj.s2);
+        b3.classList.toggle("on", obj.s3);
+        b4.classList.toggle("on", obj.s4);
     }
 }
 function onOpen(event) {

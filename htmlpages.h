@@ -51,6 +51,7 @@ button {
     color: var(--text-color);
     font-weight: bold;
     background-color: var(--highlight);
+    font-size: 20px;
 }
 .row{
     height: 30px;
@@ -64,6 +65,9 @@ button {
     display: flex;
     flex-direction: column;
     row-gap: 5px;
+}
+.on {
+    background-color: rgb(22, 118, 21);
 }
 
 </style>
@@ -85,21 +89,56 @@ button {
     <div class="spacer" style="padding: 10px 0px 0px 20px;"><span id="s1">Station 1 - 10 min</span></div>
     <div class="row">
     <ul>
-        <li style="float:left;"><button id="s1button" onclick="toggle(this)">ON</button></li>
+        <li style="float:left;"><button id="1" onclick="sendCommand(this)" value = "0">ON</button></li>
         <li><button>R</button></li>
         <li><button>T</button></li>
     </ul>
     </div><br>
     <div class="spacer" style="padding: 10px 0px 0px 20px;"><span id="s2">Station 2 - 10 min</span></div>
     <div class="row">
-        <li style="float:left;"><button id="s2button" onclick="toggle(this)">ON</button></li>
+        <li style="float:left;"><button id="2" onclick="sendCommand(this)" value="0">ON</button></li>
         <li><button>R</button></li>
         <li><button>T</button></li>
     </ul>
     </div>
     </div>
 </body>
+
 <script>
+// Get elements that need updating
+const s1 = document.getElementById("s1");
+const s2 = document.getElementById("s2");
+const s3 = document.getElementById("s3");
+const s4 = document.getElementById("s4");
+const b1 = document.getElementById("1");
+const b2 = document.getElementById("2");
+const b3 = document.getElementById("3");
+const b4 = document.getElementById("4");
+// Object sent from server to update elements on the page
+var pageObj = {
+    s1 : 0,
+    s2 : 0,
+    s3 : 0,
+    s4 : 0,
+    s1name : "Station 1",
+    S2name : "Station 2",
+    s3name : "Station 3",
+    s4name : "Station 4",
+    s1time : 10,
+    s2time : 10,
+    s3time : 10,
+    s4time : 10
+}
+// Command object sent to server 1-6 indicates which output to toggle
+// 5 and 6 will be to toogle the 2 programs on the prohgram page
+function sendCommand(element) {
+    var id = element.id;
+    var commandObj = {type : "command", toggle : 0};
+    commandObj.toggle = id;
+    websocket.send(JSON.stringify(commandObj));
+    console.log(commandObj);
+}
+// Setup websocket connection
 var server = 'ws://' + window.location.hostname + '/ws';
 var websocket;
 window.addEventListener('load', onLoad);
@@ -110,12 +149,26 @@ function initWebSocket(){
     websocket.onclose = onClose;
     websocket.onmessage = onMessage;
 }
-
+// OnMessage processes the incoming new data for the whole pages
 function onMessage(event) {
-    console.log(event.data);
+    console.log("Message receievd from server");
+    var obj = JSON.parse(event.data);
+    if("message" in obj) console.log(obj);
+    if("s1name" in obj) {
+        s1.innerHTML(obj.s1name + ' - ' + obj.s1time + ' min');
+        s2.innerHTML(obj.s2name + ' - ' + obj.s2time + ' min');
+        s3.innerHTML(obj.s3name + ' - ' + obj.s3time + ' min');
+        s3.innerHTML(obj.s4name + ' - ' + obj.s4time + ' min');
+        b1.classList.toggle("on", obj.s1);
+        b1.classList.toggle("on", obj.s2);
+        b1.classList.toggle("on", obj.s3);
+        b1.classList.toggle("on", obj.s4);
+    }
 }
 function onOpen(event) {
     console.log('Connection open');
+    var requestObj = {type : "request", page : "home"};
+    websocket.send(JSON.stringify(requestObj));
 }
 function onClose(event) {
     console.log('Connection closed');
@@ -125,14 +178,5 @@ function onLoad(event) {
     initWebSocket();
 }
 
-function toggle(element){
-    var id = element.id;
-    console.log("button clicked");
-    var obj = {};
-    obj[id] = "toggle";
-    console.log(obj);
-    websocket.send(JSON.stringify(obj));
-}
 </script>
-</html>
-)rawliteral";
+</html>)rawliteral";

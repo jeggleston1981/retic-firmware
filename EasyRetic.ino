@@ -41,11 +41,39 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket
       Serial.println("deserialization failed");
       return;
     }else{
-      const char * s1button = doc["s1button"];
-      Serial.println(String(s1button));
+      const char * button = doc["toggle"];
+      Serial.print("Button number:");
+      Serial.println(String(button));
+      sendDataWs(client);
+      // Create a function to toggle the correct station in ReticSchedule and use it here
     }
-    client->text("I got your text message");
+    //client->text('{"message" : "ok"}');
   }
+}
+
+void sendDataWs(AsyncWebSocketClient * client)
+{
+    DynamicJsonDocument jsonBuffer(512);
+    JsonObject root = jsonBuffer.to<JsonObject>();
+    root["s1"] = 1;
+    root["s2"] = 0;
+    root["s3"] = 0;
+    root["s4"] = 0;
+    root["s1name"] = "Driveway";
+    root["s2name"] = "Front Garden";
+    root["s3name"] = "Pool Area";
+    root["s4name"] = "Side Garden";
+    root["s1time"] = 10;
+    root["s2time"] = 5;
+    root["s3time"] = 10;
+    root["s4time"] = 10;
+
+    String output;
+    //AsyncWebSocketMessageBuffer * buffer = ws.makeBuffer(len); //  creates a buffer (len + 1) for you.
+    if (true) {
+        serializeJson(root, output);
+        ws.textAll(output);
+    }
 }
 
 void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type,
