@@ -109,7 +109,7 @@ bool ReticSchedule::step(void)
 		_previousTime = millis() + _s4time;
 	return true;
 }
-void ReticSchedule::toggle(int station, struct Times *savedTimes)
+void ReticSchedule::toggle(int station, Times *savedTimes)
 {
 	if (_startFlag)
 	{

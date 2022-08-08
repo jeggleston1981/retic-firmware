@@ -10,6 +10,13 @@
 
 #include <Arduino.h>
 
+typedef struct
+{
+	int s1;
+	int s2;
+	int s3;
+	int s4;
+} Times;
 class ReticSchedule
 {
 private:
@@ -23,13 +30,6 @@ private:
 	int _s2time;
 	int _s3time;
 	int _s4time;
-	struct Times
-	{
-		int s1;
-		int s2;
-		int s3;
-		int s4;
-	};
 
 	unsigned long _previousTime;
 	unsigned long _minute;
@@ -51,7 +51,7 @@ public:
 	bool step(void);
 	void stop(void);
 	int checkStatus(void);
-	void toggle(int station, struct Times *savedTimes);
+	void toggle(int station, Times *savedTimes);
 	bool checkStationStatus(int station);
 };
 #endif

@@ -42,10 +42,10 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket
       const char *button = doc["toggle"];
       Serial.print("Button number:");
       Serial.println(String(button));
+      rs.toggle(button, &savedTimes);
       sendDataWs(client);
       // Create a function to toggle the correct station in ReticSchedule and use it here
     }
-    // client->text('{"message" : "ok"}');
   }
 }
 
@@ -53,21 +53,20 @@ void sendDataWs(AsyncWebSocketClient *client)
 {
   DynamicJsonDocument jsonBuffer(512);
   JsonObject root = jsonBuffer.to<JsonObject>();
-  root["s1"] = 1;
-  root["s2"] = 0;
-  root["s3"] = 0;
-  root["s4"] = 0;
+  root["s1"] = rs.checkStationStatus(1);
+  root["s2"] = rs.checkStationStatus(2);
+  root["s3"] = rs.checkStationStatus(3);
+  root["s4"] = rs.checkStationStatus(4);
   root["s1name"] = "Driveway";
   root["s2name"] = "Front Garden";
   root["s3name"] = "Pool Area";
   root["s4name"] = "Side Garden";
-  root["s1time"] = 10;
-  root["s2time"] = 5;
-  root["s3time"] = 10;
-  root["s4time"] = 10;
+  root["s1time"] = savedTimes.s1;
+  root["s2time"] = savedTimes.s2;
+  root["s3time"] = savedTimes.s3;
+  root["s4time"] = savedTimes.s4;
 
   String output;
-  // AsyncWebSocketMessageBuffer * buffer = ws.makeBuffer(len); //  creates a buffer (len + 1) for you.
   if (true)
   {
     serializeJson(root, output);
