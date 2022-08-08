@@ -25,8 +25,8 @@ Config config{1,2,1,2};
 
 DynamicJsonDocument doc(512);
 
-IPAddress local_IP(192,168,4,1);
-IPAddress gateway(192,168,4,1);
+IPAddress local_IP(10,1,1,1);
+IPAddress gateway(10,1,1,1);
 IPAddress subnet(255,255,255,0);
 
 void notifyClients() {
