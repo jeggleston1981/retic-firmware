@@ -39,11 +39,16 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket
     }
     else
     {
-      const char *button = doc["toggle"];
-      Serial.print("Button number:");
-      Serial.println(String(button));
-      rs.toggle(atoi(button), &savedTimes);
-      sendDataWs(client);
+      if(doc["type"] == "request"){
+        Serial.println("processing request");
+        sendDataWs();
+      }else if(doc["type"] == "command"){
+        int button = doc["toggle"];
+        Serial.print("Button number:");
+        Serial.println(button);
+        rs.toggle(button, 1);
+        sendDataWs();
+      }
       // Create a function to toggle the correct station in ReticSchedule and use it here
     }
   }
@@ -123,4 +128,8 @@ void loop()
 {
   // put your main code here, to run repeatedly:
   rs.loop();
+  ws.cleanupClients();
+  if(rs.returnMode()){
+    sendDataWs();
+    rs.resetMode();
 }

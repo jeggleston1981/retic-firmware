@@ -240,7 +240,7 @@ void ReticSchedule::_s4(void)
 
 	if (!digitalRead(_masterpin))
 		digitalWrite(_masterpin, HIGH);
-	if (digitalRead(_pin4) == LOW && _mode == 1)
+	if (digitalRead(_pin4) == LOW)
 	{
 		digitalWrite(_pin4, HIGH);
 		_previousTime = millis();
