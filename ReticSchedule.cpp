@@ -126,13 +126,18 @@ void ReticSchedule::stop(void)
 	_currentStation = 0;
 	_previousTime = 0;
 	_startFlag = false;
-	_mode = 0;
 	_program = false;
 	digitalWrite(_masterpin, LOW);
 	digitalWrite(_pin1, LOW);
 	digitalWrite(_pin2, LOW);
 	digitalWrite(_pin3, LOW);
 	digitalWrite(_pin4, LOW);
+}
+int ReticSchedule::returnMode(void){
+	return _mode;
+}
+void ReticSchedule::resetMode(void){
+	_mode = 0;
 }
 
 void ReticSchedule::_s1(void)
@@ -152,7 +157,7 @@ void ReticSchedule::_s1(void)
 			digitalWrite(_masterpin, LOW);
 			digitalWrite(_pin1, LOW);
 			_currentStation = 0;
-			_mode = 0;
+			_mode = 1;
 			_startFlag = false;
 			_previousTime = 0;
 		}
@@ -161,6 +166,7 @@ void ReticSchedule::_s1(void)
 			_currentStation = 2;
 			digitalWrite(_pin1, LOW);
 			_previousTime = 0;
+			_mode = 1;
 		}
 	}
 }
@@ -183,7 +189,7 @@ void ReticSchedule::_s2(void)
 			digitalWrite(_masterpin, LOW);
 			digitalWrite(_pin2, LOW);
 			_currentStation = 0;
-			_mode = 0;
+			_mode = 1;
 			_startFlag = false;
 			_previousTime = 0;
 		}
@@ -192,6 +198,7 @@ void ReticSchedule::_s2(void)
 			_currentStation = 3;
 			digitalWrite(_pin2, LOW);
 			_previousTime = 0;
+			_mode = 1;
 		}
 	}
 }
@@ -214,7 +221,7 @@ void ReticSchedule::_s3(void)
 			digitalWrite(_masterpin, LOW);
 			digitalWrite(_pin3, LOW);
 			_currentStation = 0;
-			_mode = 0;
+			_mode = 1;
 			_startFlag = false;
 			_previousTime = 0;
 		}
@@ -223,6 +230,7 @@ void ReticSchedule::_s3(void)
 			_currentStation = 4;
 			digitalWrite(_pin3, LOW);
 			_previousTime = 0;
+			_mode = 1;
 		}
 	}
 }
@@ -244,7 +252,7 @@ void ReticSchedule::_s4(void)
 		digitalWrite(_masterpin, LOW);
 		digitalWrite(_pin4, LOW);
 		_currentStation = 0;
-		_mode = 0;
+		_mode = 1;
 		_startFlag = false;
 		_program = false;
 		_previousTime = 0;

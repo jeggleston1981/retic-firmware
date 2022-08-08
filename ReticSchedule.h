@@ -53,5 +53,7 @@ public:
 	int checkStatus(void);
 	void toggle(int station, int time);
 	bool checkStationStatus(int station);
+	int returnMode(void);
+	void resetMode(void);
 };
 #endif
