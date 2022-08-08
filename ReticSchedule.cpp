@@ -3,8 +3,9 @@
 
 #include <ReticSchedule.h>
 
-ReticSchedule::ReticSchedule(int master_pin, int s1pin, int s2pin, int s3pin, int s4pin) {
-	
+ReticSchedule::ReticSchedule(int master_pin, int s1pin, int s2pin, int s3pin, int s4pin)
+{
+
 	_masterpin = master_pin;
 	_pin1 = s1pin;
 	_pin2 = s2pin;
@@ -27,144 +28,218 @@ ReticSchedule::ReticSchedule(int master_pin, int s1pin, int s2pin, int s3pin, in
 	_currentStation = 0;
 	_program = false;
 	_minute = 60000UL;
-	_mode = 0; //We might not need this variable
+	_mode = 0; // We might not need this variable
 }
-	/*************** Public methods **************/
+/*************** Public methods **************/
 
-	void ReticSchedule::loop(void) {
+void ReticSchedule::loop(void)
+{
 
-		if(_startFlag && _currentStation == 1) _s1();
-		if(_startFlag && _currentStation == 2) _s2();
-		if(_startFlag && _currentStation == 3) _s3();
-		if(_startFlag && _currentStation == 4) _s4();
-	}
-	// To start program enter runtimes in minutes
-	void ReticSchedule::startProgram(int s1 ,int s2 ,int s3, int s4) {
+	if (_startFlag && _currentStation == 1)
+		_s1();
+	if (_startFlag && _currentStation == 2)
+		_s2();
+	if (_startFlag && _currentStation == 3)
+		_s3();
+	if (_startFlag && _currentStation == 4)
+		_s4();
+}
+// To start program enter runtimes in minutes
+void ReticSchedule::startProgram(int s1, int s2, int s3, int s4)
+{
 
-		_program = true;
-		_startFlag = true;
-		_currentStation = 1;
-		_s1time = s1;
-	    _s2time = s2;
-	    _s3time = s3;
-	    _s4time = s4;
+	_program = true;
+	_startFlag = true;
+	_currentStation = 1;
+	_s1time = s1;
+	_s2time = s2;
+	_s3time = s3;
+	_s4time = s4;
+}
+void ReticSchedule::startStation(int station, int time)
+{
 
-	}
-	void ReticSchedule::startStation(int station, int time) {
+	_currentStation = station;
+	_startFlag = true;
+	_program = false;
+	if (_currentStation == 1)
+		_s1time = time;
+	if (_currentStation == 2)
+		_s2time = time;
+	if (_currentStation == 3)
+		_s3time = time;
+	if (_currentStation == 4)
+		_s4time = time;
+}
 
-		_currentStation = station;
-		_startFlag = true;
-		_program = false;
-		if(_currentStation == 1) _s1time = time;
-		if(_currentStation == 2) _s2time = time;
-		if(_currentStation == 3) _s3time = time;
-		if(_currentStation == 4) _s4time = time;
-
-	}
-	
-	int ReticSchedule::checkStatus(void){
-		if(!_startFlag) return 0;
-		if(_currentStation == 1 && !_program) return 1;
-		if(_currentStation == 2 && !_program) return 2;
-		if(_currentStation == 3 && !_program) return 3;
-		if(_currentStation == 4 && !_program) return 4;
-		return -1;
-	}
-	bool ReticSchedule::step(void){
-		if(_currentStation == 0) return false;
-		if(!_program) return false;
-		if(_currentStation == 1) _previousTime = millis() + _s1time;
-		if(_currentStation == 2) _previousTime = millis() + _s2time;
-		if(_currentStation == 3) _previousTime = millis() + _s3time;
-		if(_currentStation == 4) _previousTime = millis() + _s4time;
+int ReticSchedule::checkStatus(void) // This will need to be modified to track program 1 and 2
+{
+	if (!_startFlag)
+		return 0;
+	if (_currentStation == 1 && !_program)
+		return 1;
+	if (_currentStation == 2 && !_program)
+		return 2;
+	if (_currentStation == 3 && !_program)
+		return 3;
+	if (_currentStation == 4 && !_program)
+		return 4;
+	return -1;
+}
+bool ReticSchedule::checkStationStatus(int station)
+{
+	if (_currentStation == station && _startFlag)
 		return true;
-		
-	}
-	void ReticSchedule::stop(void) {
-		_currentStation = 4;
+	else
+		return false;
+}
+bool ReticSchedule::step(void)
+{
+	if (_currentStation == 0)
+		return false;
+	if (!_program)
+		return false;
+	if (_currentStation == 1)
+		_previousTime = millis() + _s1time;
+	if (_currentStation == 2)
+		_previousTime = millis() + _s2time;
+	if (_currentStation == 3)
+		_previousTime = millis() + _s3time;
+	if (_currentStation == 4)
 		_previousTime = millis() + _s4time;
+	return true;
+}
+void ReticSchedule::toggle(int station, struct Times *savedTimes)
+{
+	if (_startFlag)
+	{
+		stop();
 	}
-
-	void ReticSchedule::_s1(void) {
-
-		if(digitalRead(_pin1) == LOW) {
-			digitalWrite(_masterpin, HIGH);
-			digitalWrite(_pin1, HIGH);
-			_previousTime = millis();
-			_mode = 1;
-		}else if(_previousTime + (_s1time * _minute) <= millis()){
-			if(!_program) {
-				digitalWrite(_masterpin, LOW);
-				digitalWrite(_pin1, LOW);
-				_currentStation = 0;
-				_mode = 0;
-				_startFlag = false;
-			}else {
-				_currentStation = 2;
-				digitalWrite(_pin1, LOW);
-			}
-		}
+	else
+	{
+		int time;
+		if (station == 1)
+			time = savedTimes->s1;
+		if (station == 2)
+			time = savedTimes->s2;
+		if (station == 3)
+			time = savedTimes->s3;
+		if (station == 4)
+			time = savedTimes->s4;
+		startStation(station, time);
 	}
+}
+void ReticSchedule::stop(void)
+{
+	_currentStation = 4;
+	_previousTime = millis() + _s4time;
+}
 
-	void ReticSchedule::_s2(void) {
+void ReticSchedule::_s1(void)
+{
 
-		if(!digitalRead(_masterpin)) digitalWrite(_masterpin, HIGH); 
-		if(digitalRead(_pin2) == LOW) {
-			digitalWrite(_pin2, HIGH);
-			_previousTime = millis();
-			_mode = 1;
-		}else if(_previousTime + (_s2time * _minute) <= millis()){
-			if(!_program) {
-				digitalWrite(_masterpin, LOW);
-				digitalWrite(_pin2, LOW);
-				_currentStation = 0;
-				_mode = 0;
-				_startFlag = false;
-			}else {
-				_currentStation = 3;
-				digitalWrite(_pin2, LOW);
-			}
-		}
-		
+	if (digitalRead(_pin1) == LOW)
+	{
+		digitalWrite(_masterpin, HIGH);
+		digitalWrite(_pin1, HIGH);
+		_previousTime = millis();
+		_mode = 1;
 	}
-
-	void ReticSchedule::_s3(void) {
-
-		if(!digitalRead(_masterpin)) digitalWrite(_masterpin, HIGH); 
-		if(digitalRead(_pin3) == LOW) {
-			digitalWrite(_pin3, HIGH);
-			_previousTime = millis();
-			_mode = 1;
-		}else if(_previousTime + (_s3time * _minute) <= millis()){
-			if(!_program) {
-				digitalWrite(_masterpin, LOW);
-				digitalWrite(_pin3, LOW);
-				_currentStation = 0;
-				_mode = 0;
-				_startFlag = false;
-			}else {
-				_currentStation = 4;
-				digitalWrite(_pin3, LOW);
-			}
-		}
-		
-	}
-
-	void ReticSchedule::_s4(void) {
-
-		if(!digitalRead(_masterpin)) digitalWrite(_masterpin, HIGH); 
-		if(digitalRead(_pin4) == LOW && _mode == 1) {
-			digitalWrite(_pin4, HIGH);
-			_previousTime = millis();
-			_mode = 1;
-		}else if(_previousTime + (_s4time * _minute) <= millis()){
-
+	else if (_previousTime + (_s1time * _minute) <= millis())
+	{
+		if (!_program)
+		{
 			digitalWrite(_masterpin, LOW);
-			digitalWrite(_pin4, LOW);
+			digitalWrite(_pin1, LOW);
 			_currentStation = 0;
 			_mode = 0;
 			_startFlag = false;
-			_program = false;
 		}
-		
+		else
+		{
+			_currentStation = 2;
+			digitalWrite(_pin1, LOW);
+		}
 	}
+}
+
+void ReticSchedule::_s2(void)
+{
+
+	if (!digitalRead(_masterpin))
+		digitalWrite(_masterpin, HIGH);
+	if (digitalRead(_pin2) == LOW)
+	{
+		digitalWrite(_pin2, HIGH);
+		_previousTime = millis();
+		_mode = 1;
+	}
+	else if (_previousTime + (_s2time * _minute) <= millis())
+	{
+		if (!_program)
+		{
+			digitalWrite(_masterpin, LOW);
+			digitalWrite(_pin2, LOW);
+			_currentStation = 0;
+			_mode = 0;
+			_startFlag = false;
+		}
+		else
+		{
+			_currentStation = 3;
+			digitalWrite(_pin2, LOW);
+		}
+	}
+}
+
+void ReticSchedule::_s3(void)
+{
+
+	if (!digitalRead(_masterpin))
+		digitalWrite(_masterpin, HIGH);
+	if (digitalRead(_pin3) == LOW)
+	{
+		digitalWrite(_pin3, HIGH);
+		_previousTime = millis();
+		_mode = 1;
+	}
+	else if (_previousTime + (_s3time * _minute) <= millis())
+	{
+		if (!_program)
+		{
+			digitalWrite(_masterpin, LOW);
+			digitalWrite(_pin3, LOW);
+			_currentStation = 0;
+			_mode = 0;
+			_startFlag = false;
+		}
+		else
+		{
+			_currentStation = 4;
+			digitalWrite(_pin3, LOW);
+		}
+	}
+}
+
+void ReticSchedule::_s4(void)
+{
+
+	if (!digitalRead(_masterpin))
+		digitalWrite(_masterpin, HIGH);
+	if (digitalRead(_pin4) == LOW && _mode == 1)
+	{
+		digitalWrite(_pin4, HIGH);
+		_previousTime = millis();
+		_mode = 1;
+	}
+	else if (_previousTime + (_s4time * _minute) <= millis())
+	{
+
+		digitalWrite(_masterpin, LOW);
+		digitalWrite(_pin4, LOW);
+		_currentStation = 0;
+		_mode = 0;
+		_startFlag = false;
+		_program = false;
+	}
+}
