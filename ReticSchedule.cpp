@@ -62,6 +62,7 @@ void ReticSchedule::startStation(int station, int time)
 	_currentStation = station;
 	_startFlag = true;
 	_program = false;
+	_previousTime = 0;
 	if (_currentStation == 1)
 		_s1time = time;
 	if (_currentStation == 2)
@@ -109,7 +110,7 @@ bool ReticSchedule::step(void)
 		_previousTime = millis() + _s4time;
 	return true;
 }
-void ReticSchedule::toggle(int station, Times *savedTimes)
+void ReticSchedule::toggle(int station, int time)
 {
 	if (_startFlag)
 	{
@@ -117,22 +118,21 @@ void ReticSchedule::toggle(int station, Times *savedTimes)
 	}
 	else
 	{
-		int time;
-		if (station == 1)
-			time = savedTimes->s1;
-		if (station == 2)
-			time = savedTimes->s2;
-		if (station == 3)
-			time = savedTimes->s3;
-		if (station == 4)
-			time = savedTimes->s4;
 		startStation(station, time);
 	}
 }
 void ReticSchedule::stop(void)
 {
-	_currentStation = 4;
-	_previousTime = millis() + _s4time;
+	_currentStation = 0;
+	_previousTime = 0;
+	_startFlag = false;
+	_mode = 0;
+	_program = false;
+	digitalWrite(_masterpin, LOW);
+	digitalWrite(_pin1, LOW);
+	digitalWrite(_pin2, LOW);
+	digitalWrite(_pin3, LOW);
+	digitalWrite(_pin4, LOW);
 }
 
 void ReticSchedule::_s1(void)
@@ -154,11 +154,13 @@ void ReticSchedule::_s1(void)
 			_currentStation = 0;
 			_mode = 0;
 			_startFlag = false;
+			_previousTime = 0;
 		}
 		else
 		{
 			_currentStation = 2;
 			digitalWrite(_pin1, LOW);
+			_previousTime = 0;
 		}
 	}
 }
@@ -183,11 +185,13 @@ void ReticSchedule::_s2(void)
 			_currentStation = 0;
 			_mode = 0;
 			_startFlag = false;
+			_previousTime = 0;
 		}
 		else
 		{
 			_currentStation = 3;
 			digitalWrite(_pin2, LOW);
+			_previousTime = 0;
 		}
 	}
 }
@@ -212,11 +216,13 @@ void ReticSchedule::_s3(void)
 			_currentStation = 0;
 			_mode = 0;
 			_startFlag = false;
+			_previousTime = 0;
 		}
 		else
 		{
 			_currentStation = 4;
 			digitalWrite(_pin3, LOW);
+			_previousTime = 0;
 		}
 	}
 }
@@ -241,5 +247,6 @@ void ReticSchedule::_s4(void)
 		_mode = 0;
 		_startFlag = false;
 		_program = false;
+		_previousTime = 0;
 	}
 }

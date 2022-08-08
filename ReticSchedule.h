@@ -51,7 +51,7 @@ public:
 	bool step(void);
 	void stop(void);
 	int checkStatus(void);
-	void toggle(int station, Times *savedTimes);
+	void toggle(int station, int time);
 	bool checkStationStatus(int station);
 };
 #endif
