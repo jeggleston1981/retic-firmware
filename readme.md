@@ -56,7 +56,7 @@ Send a new station name:
 
 ### Disable/Enable Program
 
-Set program 1 to enabled. 
+Set program 1 to enabled:  
 
 >`SEND:{"command": "disable", "pId": 1, "pDisable": false}`
 >
