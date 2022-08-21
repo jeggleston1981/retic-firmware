@@ -53,3 +53,11 @@ Send a new station name:
 >`SEND:{"command": "name", "sId": 1, "sName": "New Name"}`
 >
 >`RESPONSE:{"sId": 1, "sName": "New Name", "sTime": 10, "isOn": true}`
+
+### Disable/Enable Program
+
+Set program 1 to enabled. 
+
+>`SEND:{"command": "disable", "pId": 1, "pDisable": false}`
+>
+>`RESPONSE:{"command": "disable", "pId": 1, "pDisable": false}`
