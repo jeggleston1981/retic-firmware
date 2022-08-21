@@ -43,7 +43,7 @@ Response if station was toggled to on:
 Send a new run time in minutes:  
 
 >`SEND:{"command": "time", "sId": 1, "sTime": 15}`   
-
+>
 >`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`  
 
 ### Update station name
@@ -51,5 +51,5 @@ Send a new run time in minutes:
 Send a new station name:
 
 >`SEND:{"command": "name", "sId": 1, "sName": "New Name"}`
-
+>
 >`RESPONSE:{"sId": 1, "sName": "New Name", "sTime": 10, "isOn": true}`
