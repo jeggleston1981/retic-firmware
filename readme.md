@@ -33,9 +33,8 @@ This is generally not required
 ### Toggle a station
 Toggle the status of station 1:  
 >`SEND:{"command": "toggle", "sId": 1}`  
-Response is station was toggled to on:  
+Response if station was toggled to on:  
 >`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`  
-As you can see it includes the station name, run time in minutes and is ON flag.
 
 ### Update the station runtime
 Send a new run time in minutes:  
