@@ -27,20 +27,29 @@ First a user connects their phone to the AP the device creates. Then on connecti
 - isRunning : False or 0 if the program is not running, total seconds remaining in the program run time
 
 ### Set time of day
+
 This is generally not required
 >`SEND:{"hour": 7,"minute": 15,"second": 10,"day": 21,"month": 6,"year":22,"week":1}`
 
 ### Toggle a station
+
 Toggle the status of station 1:  
 >`SEND:{"command": "toggle", "sId": 1}`  
 Response if station was toggled to on:  
 >`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`  
 
 ### Update the station runtime
+
 Send a new run time in minutes:  
 
 >`SEND:{"command": "time", "sId": 1, "sTime": 15}`   
 
 >`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`  
 
+### Update station name
 
+Send a new station name:
+
+>`SEND:{"command": "name", "sId": 1, "sName": "New Name"}`
+
+>`RESPONSE:{"sId": 1, "sName": "New Name", "sTime": 10, "isOn": true}`
