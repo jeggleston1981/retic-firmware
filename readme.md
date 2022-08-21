@@ -5,7 +5,7 @@ To use this code you will need to have a RTC module installed such as the DS3231
 
 ## Overview
 
-The front end GUI, that is viewed in a web browser to control and setup the Easy Retic Controller is made from Java Script and HTML, the site is loaded from the ESP8285 using ESPasyncwebserver once into the browser and once loaded communicates with the logic controller running on the ESP8285 via a websocket connection.
+The front end GUI, that is viewed in a web browser to control and setup the Easy Retic Controller is made from Java Script and HTML, the site is loaded from the ESP8285 using ESPasyncwebserver once into the browser and once loaded communicates with the logic controller running on the ESP8285 via a websocket connection. The GUI does not use any frameworks and is simple to modify should ypou like a different color scheme or layout.
 
 The websocket connection will also communicate with other devices on the saem network, so that it could be connected to 3rd party devices in this way. The command system operates on JSON formatted messages to operate stations, and receive updates.  This is a local push type of device, the best type.
 
