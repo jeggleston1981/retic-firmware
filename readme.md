@@ -31,10 +31,10 @@ This is generally not required
 >`SEND:{"hour": 7,"minute": 15,"second": 10,"day": 21,"month": 6,"year":22,"week":1}`
 
 ### Toggle a station
-Toggle the status of station 1:
->`SEND:{"command": "toggle", "sId": 1}`
-Response is station was toggled to on:
->`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`
+Toggle the status of station 1:  
+>`SEND:{"command": "toggle", "sId": 1}`  
+Response is station was toggled to on:  
+>`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`  
 As you can see it includes the station name, run time in minutes and is ON flag.
 
 ### Update the station runtime
