@@ -39,5 +39,5 @@ As you can see it includes the station name, run time in minutes and is ON flag.
 
 ### Update the station runtime
 Send a new run time in minutes:  
->'SEND:{"command": "time", "sId": 1, "sTime": 15}`.  
->`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`.  
+>'SEND:{"command": "time", "sId": 1, "sTime": 15}`   
+>`RESPONSE:{"sId": 1, "sName": "Station 1", "sTime": 10, "isOn": true}`  
